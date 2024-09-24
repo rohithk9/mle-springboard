@@ -1,7 +1,29 @@
 # Beer Recommender System
 
-This is a Flask-based application that uses a machine learning model to recommend beers based on user input. The user interacts with the app via an HTML-based chatbot, which collects preferences and displays recommendations.
+This is a Flask-based application that uses a machine learning model to recommend beers based on user input. The user interacts with the app via an HTML-based chatbot, which collects preferences and displays recommendations. This project was a capstone submission for the springboard machine learning engineering extended studies bootcamp.
 
+ #### Project Documents
+  - Project Ideas MLE
+
+    [Google Docs - Project Ideas MLE](https://docs.google.com/document/d/16dTOQjlReelYg2SycdRTSj9UKfdtHicqXO20NKD91jA/)
+
+  - Project Proposal MLE
+
+    [Google Docs - Project Proposal MLE](https://docs.google.com/document/d/1MvCQ7fpR8oWrbDG1ALFfYntaVGEXbF0z2PS159ZPIsE/)
+
+  - MLE Existing Research Survey
+
+    [Google Docs - MLE Existing Research Survey](https://docs.google.com/document/d/1Jme7_gUFBW-t2Y3A83d_ipYVXXr9JKyil-b7FYF2-N0/)
+
+  - Picking a Deployment Method
+
+    [Google Docs - Picking a Deployment Method](https://docs.google.com/document/d/1YMIwHF7KcnQG9M3TPVEU2XhrIJtXRPNysHPoJrcQOIg/)
+
+  - Designing my Deployment Solution Architecture
+
+    [Google Docs - Designing my Deployment Solution Architecture](https://docs.google.com/document/d/10jF2UdMhtCZgUt5l0ruOfxZ0rvItdONa0ma5HIXNkWM/)
+
+ 
 ## Project Structure
 
 recommender-app/
