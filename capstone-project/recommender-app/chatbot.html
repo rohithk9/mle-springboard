@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beer Recommendation Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('background.jpg'); /* Set the background image */
+            background-size: cover;  /* Ensure the image covers the entire background */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Don't repeat the image */
+            background-attachment: fixed; /* Ensure the background image stays fixed */
+        }
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .chat-body {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-footer {
+            padding: 10px;
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+        .chat-footer input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+        }
+        .chat-footer button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .bot-message {
+            background-color: #e0e0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        .user-message {
+            background-color: #4CAF50;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .restart-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Beer Recommendation Chatbot</div>
+        <div class="chat-body" id="chat-body">
+            <!-- Messages will be appended here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="userInput" placeholder="Type your message here..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let conversationStep = 1;  // Tracks the stage of the conversation
+        let userPreferences = {};  // Holds the user's preferences (style and ABV)
+        let chatEnded = false;     // Tracks if the chat has ended
+        let freshCtr = 0;
+        let prevFreshCtr = 0;
+
+        // Function to append a message to the chat
+        function appendMessage(message, isUser = false) {
+            const chatBody = document.getElementById('chat-body');
+            const messageElem = document.createElement('div');
+            messageElem.className = 'chat-message';
+            if (isUser) {
+                messageElem.classList.add('user-message');
+            } else {
+                messageElem.classList.add('bot-message');
+            }
+            messageElem.innerText = message;
+            chatBody.appendChild(messageElem);
+            chatBody.scrollTop = chatBody.scrollHeight;  // Auto-scroll to bottom
+        }
+
+        // Function to handle the message sending logic
+        function sendMessage() {
+            const inputElem = document.getElementById('userInput');
+            const userMessage = inputElem.value;
+
+            if (chatEnded) {
+                appendMessage("The chat has ended. Click the restart button to start again.", false);
+                return;
+            }
+
+            if (!userMessage) return;
+
+            // Append user's message
+            appendMessage(userMessage, true);
+            inputElem.value = '';
+
+            // Process user's input based on conversation step
+            handleConversation(userMessage);
+        }
+
+        // Function to handle the conversation flow
+        function handleConversation(userMessage) {
+            switch (conversationStep) {
+                case 1:
+                    userPreferences.style = userMessage;  // Store the beer style
+                    appendMessage("Would you like to specify an ABV level? You can say 'No' or specify a minimum ABV value (less than or equal to 10).");
+                    conversationStep++;
+                    break;
+                case 2:
+                    if (userMessage.toLowerCase() !== 'no') {
+                        userPreferences.abv = parseFloat(userMessage);  // Store ABV value
+                    }
+                    appendMessage("Fetching your recommendations...");
+
+                    // Call the Flask API with the userPreferences
+                    fetchRecommendations(false);
+                    break;
+                case 3:
+                    if (userMessage.toLowerCase() === 'yes') {
+                        userPreferences.refresh = true;
+                        appendMessage("Fetching your recommendations...");
+                        // Call the API again with refresh=True
+                        fetchRecommendations(true);
+                    } else if (userMessage.toLowerCase() === 'no') {
+                        appendMessage("Would you like to try a different style? Say 'Yes' to choose a new style or 'No' to exit.");
+                        conversationStep++;
+                    } else {
+                        appendMessage("Please respond with 'Yes' or 'No'.");
+                    }
+                    break;
+                case 4:  // New style or exit
+                    if (userMessage.toLowerCase() === 'yes') {
+                        appendMessage("What kind of beer would you like to try? You can pick from the following styles - IPA, Lager, Wheat Beer, Altbier, Stout.");
+                        conversationStep = 1;  // Restart conversation for new beer style
+                    } else if (userMessage.toLowerCase() === 'no') {
+                        appendMessage("Thank you for using the Beer Recommendation Chatbot!");
+                        chatEnded = true;  // End the chat
+                        showRestartButton();  // Show restart button after chat ends
+                    } else {
+                        appendMessage("Please respond with 'Yes' or 'No'.");
+                    }
+                    break;
+            }
+        }
+
+        // Function to fetch recommendations from the Flask API
+        function fetchRecommendations(isRefresh) {
+            let refreshAgain = false;
+            if (isRefresh) {
+                userPreferences.refresh = true;
+            }
+            if (conversationStep === 3) {
+                conversationStep = 3;
+                refreshAgain = true;
+            }
+        // public IPs of EC2 instances change when they are stopped and restarted
+        // this field will need to be changed every time the instance is restarted
+            fetch('http://34.205.26.209:3000/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userPreferences)  // Ensure ABV and style are sent
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    appendMessage(data.message);  // Show error or no results message
+                } else if (data.beer_recommendations) {
+                    let recommendations = "Here are your recommendations:\n";
+                    data.beer_recommendations.forEach(beer => {
+                        recommendations += `${beer.Name} (${beer.Style}) - ABV: ${beer.ABV}\n`;
+                    });
+                    appendMessage(recommendations);
+                } else {
+                    appendMessage("No recommendations available.");
+                }
+
+                if (conversationStep === 2) {
+                    appendMessage("Would you like fresher recommendations? Say 'Yes' or 'No'.");
+                    conversationStep++;
+                }
+                if (refreshAgain) {
+                    appendMessage("Would you like fresher recommendations? Say 'Yes' or 'No'.");
+                    refreshAgain=false;
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);  // Log any error to the console
+                appendMessage('Sorry, something went wrong.');  // Show error message to the user
+            });
+        }
+
+        // Function to display the restart button
+        function showRestartButton() {
+            const chatBody = document.getElementById('chat-body');
+            const restartBtn = document.createElement('button');
+            restartBtn.className = 'restart-btn';
+            restartBtn.innerText = 'Restart Chat';
+            restartBtn.onclick = function() {
+                window.location.reload();  // Reloads the page to restart the chat
+            };
+            chatBody.appendChild(restartBtn);
+            chatBody.scrollTop = chatBody.scrollHeight;  // Auto-scroll to bottom
+        }
+
+        // Function to initialize the chat with a welcome message
+        function initChat() {
+            appendMessage("What kind of beer would you like to try? You can pick from the following styles - IPA, Lager, Wheat Beer, Altbier, Stout.");
+        }
+
+        // Add event listener to allow sending message on pressing "Enter"
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize the chat on page load
+        window.onload = initChat;
+    </script>
+
+</body>
+</html>
