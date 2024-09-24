@@ -42,10 +42,13 @@ Before running the application, ensure that you have the following installed on 
 
   ```python3 rec_app.py```
 
-5. Open the Chatbot Interface
+5. Edit the chatbot.html
+  Before running the html file in your browser, please edit the IP address on line 210 to match your local environments IP. (Eg: 127.0.0.1:3000)
+
+7. Open the Chatbot Interface
   To interact with the chatbot, open the chatbot.html file in your browser. This file sends input to the Flask app and displays beer recommendations based on user preferences.
 
-6. Stop the Flask App
+8. Stop the Flask App
   To stop the Flask server, press Ctrl+C in the terminal where the server is running.
 
 ## License
