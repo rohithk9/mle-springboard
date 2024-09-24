@@ -21,24 +21,24 @@ Before running the application, ensure that you have the following installed on 
 1. Clone the Repository
   Clone the repository to your local machine:
 
-  git clone https://github.com/rohithk9/mle-springboard.git
-  cd recommender-app
+  ```git clone https://github.com/rohithk9/mle-springboard.git```
+  ```cd recommender-app```
 
 2. Set Up a Virtual Environment (optional)
   Set up a virtual environment to keep dependencies isolated:
 
-  python3 -m venv venv
-  source venv/bin/activate
+  ```python3 -m venv venv```
+  ```source venv/bin/activate```
 
 3. Install Dependencies
   Install the required Python packages using pip and the requirements.txt file:
 
-  pip install -r requirements.txt
+  ```pip install -r requirements.txt```
 
 4. Run the Flask App
   Run the Flask app locally by executing the following command:
 
-  python3 rec_app.py
+  ```python3 rec_app.py```
 
 5. Open the Chatbot Interface
   To interact with the chatbot, open the chatbot.html file in your browser. This file sends input to the Flask app and displays beer recommendations based on user preferences.
