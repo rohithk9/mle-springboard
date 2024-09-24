@@ -22,12 +22,14 @@ Before running the application, ensure that you have the following installed on 
   Clone the repository to your local machine:
 
   ```git clone https://github.com/rohithk9/mle-springboard.git```
+  
   ```cd recommender-app```
 
 2. Set Up a Virtual Environment (optional)
   Set up a virtual environment to keep dependencies isolated:
 
   ```python3 -m venv venv```
+  
   ```source venv/bin/activate```
 
 3. Install Dependencies
