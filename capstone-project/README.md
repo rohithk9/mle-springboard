@@ -5,11 +5,10 @@ This is a Flask-based application that uses a machine learning model to recommen
 ## Project Structure
 
 recommender-app/
-│
-├── rec_app.py                # The main Flask app script
-├── beer_recommender_model.pkl # Pre-trained machine learning model
-├── requirements.txt          # Required dependencies
-└── chatbot.html              # HTML interface for user interaction (chatbot)
+  - rec_app.py                # The main Flask app script
+  - beer_recommender_model.pkl # Pre-trained machine learning model
+  - requirements.txt          # Required dependencies
+  - chatbot.html              # HTML interface for user interaction (chatbot)
 
 ## Prerequisites
 Before running the application, ensure that you have the following installed on your local machine:
