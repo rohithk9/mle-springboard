@@ -23,14 +23,14 @@ This is a Flask-based application that uses a machine learning model to recommen
 
     [Google Docs - Designing my Deployment Solution Architecture](https://docs.google.com/document/d/10jF2UdMhtCZgUt5l0ruOfxZ0rvItdONa0ma5HIXNkWM/)
 
- 
+
 ## Project Structure
 
 recommender-app/
-  - /rec_app.py              
-  - /beer_recommender_model.pkl 
-  - /requirements.txt
-  - /chatbot.html            
+  - rec_app.py
+  - beer_recommender_model.pkl
+  - requirements.txt
+  - chatbot.html
 
 ## Prerequisites
 Before running the application, ensure that you have the following installed on your local machine:
@@ -40,39 +40,60 @@ Before running the application, ensure that you have the following installed on 
  - Flask and other required libraries (specified in requirements.txt)
 
 ## Getting Started
-1. Clone the Repository
-  Clone the repository to your local machine:
+1. Clone the repository
 
-  ```git clone https://github.com/rohithk9/mle-springboard.git```
-  
-  ```cd recommender-app```
+  ```bash
+  git clone https://github.com/rohithk9/mle-springboard.git
+  cd mle-springboard/capstone-project/recommender-app
+  ```
 
-2. Set Up a Virtual Environment (optional)
-  Set up a virtual environment to keep dependencies isolated:
+2. Set up a virtual environment (optional)
 
-  ```python3 -m venv venv```
-  
-  ```source venv/bin/activate```
+  ```bash
+  python3 -m venv venv
+  source venv/bin/activate
+  ```
 
-3. Install Dependencies
-  Install the required Python packages using pip and the requirements.txt file:
+3. Install dependencies
 
-  ```pip install -r requirements.txt```
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-4. Run the Flask App
-  Run the Flask app locally by executing the following command:
+  The `requirements.txt` file includes the official OpenAI Python package as `openai`.
 
-  ```python3 rec_app.py```
+4. Configure your OpenAI API key
 
-5. Edit the chatbot.html
-  Before running the html file in your browser, please edit the IP address on line 210 to match your local environments IP. (Eg: 127.0.0.1:3000)
+  Create a `.env` file in `recommender-app/` with:
 
-7. Open the Chatbot Interface
-  To interact with the chatbot, open the chatbot.html file in your browser. This file sends input to the Flask app and displays beer recommendations based on user preferences.
+  ```text
+  OPENAI_API_KEY=sk-...
+  ```
 
-8. Stop the Flask App
-  To stop the Flask server, press Ctrl+C in the terminal where the server is running.
+5. Run the Flask app
+
+  ```bash
+  python3 rec_app.py
+  ```
+
+6. Edit the chatbot client if needed
+
+  Open `chatbot.html` and verify the backend address used by the client. If the app is running locally, use `http://127.0.0.1:3000` as the backend URL.
+
+7. Open the chatbot interface
+
+  Open `chatbot.html` in your browser. If the browser blocks file-based requests, you can serve the directory with:
+
+  ```bash
+  python3 -m http.server 8000
+  ```
+
+  Then visit `http://127.0.0.1:8000/chatbot.html`.
+
+8. Stop the Flask app
+
+  Press `Ctrl+C` in the terminal where the Flask server is running.
 
 ## License
-  This project is licensed under the MIT License.
 
+This project is licensed under the MIT License.
